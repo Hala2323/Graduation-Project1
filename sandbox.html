@@ -1,0 +1,76 @@
+<!doctype html>
+<meta charset="utf-8" />
+<script>
+    (function () {
+
+        const logs = [];
+        console.log = (...args) => { logs.push(args.map(String).join(' ')); };
+        window.alert = (msg) => { logs.push(String(msg)); };
+
+
+        function deepEqual(a, b) {
+            if (a === b) return true;
+            if (Number.isNaN(a) && Number.isNaN(b)) return true;
+            if (a && b && typeof a === 'object' && typeof b === 'object') {
+                if (a.constructor !== b.constructor) return false;
+                if (Array.isArray(a)) {
+                    if (a.length !== b.length) return false;
+                    for (let i = 0; i < a.length; i++) if (!deepEqual(a[i], b[i])) return false;
+                    return true;
+                }
+                const ak = Object.keys(a), bk = Object.keys(b);
+                if (ak.length !== bk.length) return false;
+                for (const k of ak) if (!deepEqual(a[k], b[k])) return false;
+                return true;
+            }
+            return false;
+        }
+
+        function runUserCode(code) {
+            logs.length = 0;
+
+            new Function(code)();
+        }
+
+
+        function evalExpr(expr, context) {
+            const keys = Object.keys(context || {});
+            const vals = keys.map(k => context[k]);
+
+            return new Function(...keys, 'return (' + expr + ');')(...vals);
+        }
+
+        addEventListener('message', (e) => {
+            const data = e.data || {};
+            if (data.type === 'run') {
+                try {
+                    runUserCode(data.code || '');
+                    parent.postMessage({ type: 'log', payload: logs.slice() }, '*');
+                } catch (err) {
+                    parent.postMessage({ type: 'log', payload: ['Error: ' + err.message] }, '*');
+                }
+            } else if (data.type === 'test') {
+                const results = [];
+                try {
+                    runUserCode(data.code || '');
+                    const __output__ = logs.slice();
+                    const cases = Array.isArray(data.cases) ? data.cases : [];
+                    for (const c of cases) {
+                        const expr = String(c.expr ?? '');
+                        try {
+                            const actual = evalExpr(expr, { __output__ });
+                            const expected = 'equals' in c ? c.equals : c.expected;
+                            const pass = deepEqual(actual, expected);
+                            results.push({ expr, pass, expected, actual });
+                        } catch (err) {
+                            results.push({ expr, pass: false, expected: c.equals ?? c.expected, actual: undefined, error: err.message });
+                        }
+                    }
+                } catch (err) {
+                    results.push({ expr: '<program>', pass: false, expected: 'program to run', actual: 'crash', error: err.message });
+                }
+                parent.postMessage({ type: 'testResult', results }, '*');
+            }
+        });
+    })();
+</script>

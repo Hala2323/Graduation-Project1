@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Blockly Code Runner + Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        html, body { height: 100%; margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+        #page { display: flex; height: 100vh; width: 100vw; }
+        #left {
+            width: 420px; flex: 0 0 420px; padding: 12px; border-right: 1px solid #e5e7eb;
+            display: flex; flex-direction: column; gap: 8px; overflow: auto;
+        }
+        label { font-size: 12px; color: #374151; }
+        .box {
+            width: 100%; resize: vertical;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 12px; line-height: 1.4; padding: 8px;
+            border: 1px solid #d1d5db; border-radius: 6px; background: #f8fafc;
+        }
+        #codeBox { height: 8rem; }
+        #testsBox { height: 10rem; }
+        .btn { padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 6px; background: #ffffff; cursor: pointer; }
+        #output, #testResults {
+            min-height: 100px; max-height: 50vh; overflow: auto;
+            border: 1px solid #e5e7eb; border-radius: 6px; background: #f9fafb;
+            padding: 8px; white-space: pre-wrap; word-break: break-word; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px;
+        }
+        #blocklyDiv { flex: 1 1 auto; height: 100vh; }
+    </style>
+</head>
+<body>
+<div id="page">
+    <div id="left">
+        <label for="codeBox">Generated code</label>
+        <textarea id="codeBox" class="box" rows="6" spellcheck="false"></textarea>
+        <button id="runBtn" class="btn" title="Run generated code">Run ▶</button>
+
+        <label>Output</label>
+        <div id="output"></div>
+
+        <label for="testsBox">Tests (use <code>__output__</code> for printed lines)</label>
+        <textarea id="testsBox" class="box" rows="10" spellcheck="false">[
+  { "expr": "__output__[0]", "equals": "Hello, world!" }
+]</textarea>
+        <button id="runTestsBtn" class="btn" title="Run tests">Run Tests ✓</button>
+
+        <label>Test Results</label>
+        <div id="testResults"></div>
+    </div>
+
+    <div id="blocklyDiv"></div>
+</div>
+
+<iframe id="runner" sandbox="allow-scripts" src="sandbox.html" style="display:none"></iframe>
+<script src="app.js"></script>
+</body>
+</html>
