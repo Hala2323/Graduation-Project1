@@ -1,0 +1,388 @@
+[
+  {
+    "id": "hello_world",
+    "title": "Hello World",
+    "description": "Print \"Hello, World!\"",
+    "difficulty": "0",
+    "audio": "Print Hello World",
+    "info": "Use the Text → print block and a text literal.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <shadow type=\"text\"><field name=\"TEXT\"></field></shadow>\n    </value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <shadow type=\"text\"><field name=\"TEXT\">Hello, World!</field></shadow>\n    </value>\n  </block>\n</xml>",
+    "vars": {},
+    "testCases": [
+      { "expr": "__output__[0]", "equals": "Hello, World!" }
+    ],
+    "blocks": ["text_print","text"]
+  },
+
+  {
+    "id": "hello_name",
+    "title": "Hello, Name",
+    "description": "Print \"Hello, &lt;name&gt;!\" using the variable name",
+    "difficulty": "0",
+    "audio": "Say hello to the given name",
+    "info": "Join text pieces: \"Hello, \", name, and \"!\".",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_name\">name</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <block type=\"text_join\">\n        <mutation items=\"3\"></mutation>\n        <value name=\"ADD0\"><block type=\"text\"><field name=\"TEXT\">Hello, </field></block></value>\n        <value name=\"ADD1\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_name\">name</field></block></value>\n        <value name=\"ADD2\"><block type=\"text\"><field name=\"TEXT\">!</field></block></value>\n      </block>\n    </value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_name\">name</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <block type=\"text_join\">\n        <mutation items=\"3\"></mutation>\n        <value name=\"ADD0\"><block type=\"text\"><field name=\"TEXT\">Hello, </field></block></value>\n        <value name=\"ADD1\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_name\">name</field></block></value>\n        <value name=\"ADD2\"><block type=\"text\"><field name=\"TEXT\">!</field></block></value>\n      </block>\n    </value>\n  </block>\n</xml>",
+    "vars": { "name": "Alice" },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": "Hello, Alice!" },
+      { "expr": "__output__[0]", "equals": "Hello, Ada!", "input": { "name": "Ada" } }
+    ],
+    "blocks": ["text_print","text","text_join","variables_get"]
+  },
+
+  {
+    "id": "print_number",
+    "title": "Print a Number",
+    "description": "Print the number n",
+    "difficulty": "0",
+    "audio": "Print the number n",
+    "info": "Use variables_get to read n and print it.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block>\n    </value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block>\n    </value>\n  </block>\n</xml>",
+    "vars": { "n": 42 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 42 }
+    ],
+    "blocks": ["text_print","variables_get"]
+  },
+
+  {
+    "id": "echo_text",
+    "title": "Echo Text",
+    "description": "Print the text provided in msg",
+    "difficulty": "0",
+    "audio": "Echo the text",
+    "info": "Directly print the variable.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_msg\">msg</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <block type=\"variables_get\"><field name=\"VAR\" id=\"var_msg\">msg</field></block>\n    </value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_msg\">msg</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <block type=\"variables_get\"><field name=\"VAR\" id=\"var_msg\">msg</field></block>\n    </value>\n  </block>\n</xml>",
+    "vars": { "msg": "hi" },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": "hi" }
+    ],
+    "blocks": ["text_print","variables_get"]
+  },
+
+  {
+    "id": "sum_two",
+    "title": "Sum of Two Numbers",
+    "description": "Print a + b",
+    "difficulty": "1",
+    "audio": "Sum two numbers",
+    "info": "Use math_arithmetic ADD and print the result.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n  </block>\n  <block type=\"text_print\" x=\"50\" y=\"120\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <block type=\"math_arithmetic\">\n        <field name=\"OP\">ADD</field>\n        <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n        <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n      </block>\n    </value>\n  </block>\n</xml>",
+    "vars": { "a": 0, "b": 0 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 5,  "input": { "a": 2, "b": 3 } },
+      { "expr": "__output__[0]", "equals": 17, "input": { "a": 8, "b": 9 } }
+    ],
+    "blocks": ["variables_get","math_number","math_arithmetic","text_print"]
+  },
+
+  {
+    "id": "difference_two",
+    "title": "Difference of Two Numbers",
+    "description": "Print a - b",
+    "difficulty": "1",
+    "audio": "Subtract b from a",
+    "info": "Use math_arithmetic MINUS.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <block type=\"math_arithmetic\">\n        <field name=\"OP\">MINUS</field>\n        <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n        <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n      </block>\n    </value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <block type=\"math_arithmetic\">\n        <field name=\"OP\">MINUS</field>\n        <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n        <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n      </block>\n    </value>\n  </block>\n</xml>",
+    "vars": { "a": 10, "b": 3 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 7,  "input": { "a": 10, "b": 3 } },
+      { "expr": "__output__[0]", "equals": -7, "input": { "a": 3,  "b": 10 } }
+    ],
+    "blocks": ["variables_get","math_arithmetic","text_print"]
+  },
+
+  {
+    "id": "product_two",
+    "title": "Product of Two Numbers",
+    "description": "Print a × b",
+    "difficulty": "1",
+    "audio": "Multiply a and b",
+    "info": "Use math_arithmetic MULTIPLY.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <block type=\"math_arithmetic\">\n        <field name=\"OP\">MULTIPLY</field>\n        <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n        <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n      </block>\n    </value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <block type=\"math_arithmetic\">\n        <field name=\"OP\">MULTIPLY</field>\n        <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n        <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n      </block>\n    </value>\n  </block>\n</xml>",
+    "vars": { "a": 7, "b": 6 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 42 }
+    ],
+    "blocks": ["variables_get","math_arithmetic","text_print"]
+  },
+
+  {
+    "id": "divide_two",
+    "title": "Divide Two Numbers",
+    "description": "Print a ÷ b",
+    "difficulty": "1",
+    "audio": "Divide a by b",
+    "info": "Use math_arithmetic DIVIDE.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <block type=\"math_arithmetic\">\n        <field name=\"OP\">DIVIDE</field>\n        <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n        <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n      </block>\n    </value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\">\n      <block type=\"math_arithmetic\">\n        <field name=\"OP\">DIVIDE</field>\n        <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n        <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n      </block>\n    </value>\n  </block>\n</xml>",
+    "vars": { "a": 7, "b": 2 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 3.5, "input": { "a": 7, "b": 2 } },
+      { "expr": "__output__[0]", "equals": 3,   "input": { "a": 9, "b": 3 } }
+    ],
+    "blocks": ["variables_get","math_arithmetic","text_print"]
+  },
+
+  {
+    "id": "even_odd",
+    "title": "Even or Odd",
+    "description": "Print EVEN if n is even, else ODD",
+    "difficulty": "1",
+    "audio": "Even or odd",
+    "info": "Use modulo n % 2 and an if/else.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"50\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable></variables>\n  <block type=\"controls_if\" x=\"50\" y=\"50\">\n    <mutation else=\"1\"></mutation>\n    <value name=\"IF0\">\n      <block type=\"logic_compare\">\n        <field name=\"OP\">EQ</field>\n        <value name=\"A\">\n          <block type=\"math_modulo\">\n            <value name=\"DIVIDEND\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n            <value name=\"DIVISOR\"><shadow type=\"math_number\"><field name=\"NUM\">2</field></shadow></value>\n          </block>\n        </value>\n        <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n      </block>\n    </value>\n    <statement name=\"DO0\"><block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">EVEN</field></shadow></value></block></statement>\n    <statement name=\"ELSE\"><block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">ODD</field></shadow></value></block></statement>\n  </block>\n</xml>",
+    "vars": { "n": 7 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": "EVEN", "input": { "n": 4 } },
+      { "expr": "__output__[0]", "equals": "ODD",  "input": { "n": 7 } }
+    ],
+    "blocks": ["variables_get","controls_if","logic_compare","math_modulo","text_print","text","math_number"]
+  },
+
+  {
+    "id": "countdown",
+    "title": "Countdown",
+    "description": "Print n, n-1, …, 0",
+    "difficulty": "1",
+    "audio": "Countdown from n to zero",
+    "info": "Use a for loop with BY = -1.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable><variable id=\"var_i\">i</variable></variables>\n  <block type=\"controls_for\" x=\"50\" y=\"50\">\n    <field name=\"VAR\" id=\"var_i\">i</field>\n    <value name=\"FROM\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n    <value name=\"TO\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n    <value name=\"BY\"><shadow type=\"math_number\"><field name=\"NUM\">-1</field></shadow></value>\n    <statement name=\"DO\">\n      <block type=\"text_print\"><value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value></block>\n    </statement>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable><variable id=\"var_i\">i</variable></variables>\n  <block type=\"controls_for\" x=\"50\" y=\"50\">\n    <field name=\"VAR\" id=\"var_i\">i</field>\n    <value name=\"FROM\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n    <value name=\"TO\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n    <value name=\"BY\"><shadow type=\"math_number\"><field name=\"NUM\">-1</field></shadow></value>\n    <statement name=\"DO\">\n      <block type=\"text_print\"><value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value></block>\n    </statement>\n  </block>\n</xml>",
+    "vars": { "n": 3 },
+    "testCases": [
+      { "expr": "__output__.length", "equals": 4, "input": { "n": 3 } },
+      { "expr": "__output__[3]", "equals": 0, "input": { "n": 3 } }
+    ],
+    "blocks": ["variables_get","controls_for","text_print","math_number"]
+  },
+
+  {
+    "id": "sum_1_n",
+    "title": "Sum 1..n",
+    "description": "Print the sum of 1 to n",
+    "difficulty": "2",
+    "audio": "Sum from one to n",
+    "info": "Loop and accumulate into sum.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"40\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable><variable id=\"var_i\">i</variable><variable id=\"var_sum\">sum</variable></variables>\n  <block type=\"variables_set\" x=\"50\" y=\"40\">\n    <field name=\"VAR\" id=\"var_sum\">sum</field>\n    <value name=\"VALUE\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n    <next>\n      <block type=\"controls_for\">\n        <field name=\"VAR\" id=\"var_i\">i</field>\n        <value name=\"FROM\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n        <value name=\"TO\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n        <value name=\"BY\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n        <statement name=\"DO\">\n          <block type=\"variables_set\">\n            <field name=\"VAR\" id=\"var_sum\">sum</field>\n            <value name=\"VALUE\">\n              <block type=\"math_arithmetic\">\n                <field name=\"OP\">ADD</field>\n                <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_sum\">sum</field></block></value>\n                <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value>\n              </block>\n            </value>\n          </block>\n        </statement>\n        <next><block type=\"text_print\"><value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_sum\">sum</field></block></value></block></next>\n      </block>\n    </next>\n  </block>\n</xml>",
+    "vars": { "n": 10 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 55, "input": { "n": 10 } },
+      { "expr": "__output__[0]", "equals": 15, "input": { "n": 5 } }
+    ],
+    "blocks": ["variables_set","variables_get","controls_for","math_arithmetic","text_print","math_number"]
+  },
+
+  {
+    "id": "factorial",
+    "title": "Factorial",
+    "description": "Print n! (factorial of n)",
+    "difficulty": "2",
+    "audio": "Factorial using a loop",
+    "info": "Initialize res=1 and multiply from 1..n.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"40\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable><variable id=\"var_i\">i</variable><variable id=\"var_res\">res</variable></variables>\n  <block type=\"variables_set\" x=\"50\" y=\"40\">\n    <field name=\"VAR\" id=\"var_res\">res</field>\n    <value name=\"VALUE\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n    <next>\n      <block type=\"controls_for\">\n        <field name=\"VAR\" id=\"var_i\">i</field>\n        <value name=\"FROM\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n        <value name=\"TO\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n        <value name=\"BY\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n        <statement name=\"DO\">\n          <block type=\"variables_set\">\n            <field name=\"VAR\" id=\"var_res\">res</field>\n            <value name=\"VALUE\">\n              <block type=\"math_arithmetic\">\n                <field name=\"OP\">MULTIPLY</field>\n                <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_res\">res</field></block></value>\n                <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value>\n              </block>\n            </value>\n          </block>\n        </statement>\n        <next><block type=\"text_print\"><value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_res\">res</field></block></value></block></next>\n      </block>\n    </next>\n  </block>\n</xml>",
+    "vars": { "n": 5 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 120, "input": { "n": 5 } },
+      { "expr": "__output__[0]", "equals": 24,  "input": { "n": 4 } }
+    ],
+    "blocks": ["variables_set","variables_get","controls_for","math_arithmetic","text_print","math_number"]
+  },
+
+  {
+    "id": "max_three",
+    "title": "Maximum of Three",
+    "description": "Print the largest of a, b, c",
+    "difficulty": "2",
+    "audio": "Find max of three",
+    "info": "Track a \"max\" variable and update it.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable><variable id=\"var_c\">c</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"30\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n  </block>\n  <block type=\"text_print\" x=\"50\" y=\"90\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n  </block>\n  <block type=\"text_print\" x=\"50\" y=\"150\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_c\">c</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable><variable id=\"var_c\">c</variable><variable id=\"var_max\">max</variable></variables>\n  <block type=\"variables_set\" x=\"50\" y=\"40\">\n    <field name=\"VAR\" id=\"var_max\">max</field>\n    <value name=\"VALUE\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n    <next>\n      <block type=\"controls_if\">\n        <value name=\"IF0\">\n          <block type=\"logic_compare\">\n            <field name=\"OP\">GT</field>\n            <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n            <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_max\">max</field></block></value>\n          </block>\n        </value>\n        <statement name=\"DO0\">\n          <block type=\"variables_set\">\n            <field name=\"VAR\" id=\"var_max\">max</field>\n            <value name=\"VALUE\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n          </block>\n        </statement>\n        <next>\n          <block type=\"controls_if\">\n            <value name=\"IF0\">\n              <block type=\"logic_compare\">\n                <field name=\"OP\">GT</field>\n                <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_c\">c</field></block></value>\n                <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_max\">max</field></block></value>\n              </block>\n            </value>\n            <statement name=\"DO0\">\n              <block type=\"variables_set\">\n                <field name=\"VAR\" id=\"var_max\">max</field>\n                <value name=\"VALUE\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_c\">c</field></block></value>\n              </block>\n            </statement>\n            <next><block type=\"text_print\"><value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_max\">max</field></block></value></block></next>\n          </block>\n        </next>\n      </block>\n    </next>\n  </block>\n</xml>",
+    "vars": { "a": 15, "b": 25, "c": 10 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 25, "input": { "a": 15, "b": 25, "c": 10 } },
+      { "expr": "__output__[0]", "equals": 30, "input": { "a": 20, "b": 15, "c": 30 } }
+    ],
+    "blocks": ["variables_set","variables_get","controls_if","logic_compare","text_print","math_number"]
+  },
+
+  {
+    "id": "multiplication_table",
+    "title": "Multiplication Table",
+    "description": "Print the first n multiples of m",
+    "difficulty": "2",
+    "audio": "Print multiples of m",
+    "info": "Loop i=1..n and print i*m.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_m\">m</variable><variable id=\"var_n\">n</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"30\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_m\">m</field></block></value>\n  </block>\n  <block type=\"text_print\" x=\"50\" y=\"90\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_m\">m</variable><variable id=\"var_n\">n</variable><variable id=\"var_i\">i</variable></variables>\n  <block type=\"controls_for\" x=\"50\" y=\"50\">\n    <field name=\"VAR\" id=\"var_i\">i</field>\n    <value name=\"FROM\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n    <value name=\"TO\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n    <value name=\"BY\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n    <statement name=\"DO\">\n      <block type=\"text_print\">\n        <value name=\"TEXT\">\n          <block type=\"math_arithmetic\">\n            <field name=\"OP\">MULTIPLY</field>\n            <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value>\n            <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_m\">m</field></block></value>\n          </block>\n        </value>\n      </block>\n    </statement>\n  </block>\n</xml>",
+    "vars": { "m": 3, "n": 5 },
+    "testCases": [
+      { "expr": "__output__.length", "equals": 5, "input": { "m": 3, "n": 5 } },
+      { "expr": "__output__[4]", "equals": 15, "input": { "m": 3, "n": 5 } }
+    ],
+    "blocks": ["variables_get","controls_for","math_arithmetic","text_print","math_number"]
+  },
+
+  {
+    "id": "fibonacci_n",
+    "title": "Nth Fibonacci",
+    "description": "Print the nth Fibonacci number (F0=0, F1=1)",
+    "difficulty": "2",
+    "audio": "Compute nth Fibonacci",
+    "info": "Handle n < 2 directly, else iterate updating a and b.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"40\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables>\n    <variable id=\"var_n\">n</variable><variable id=\"var_i\">i</variable>\n    <variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable><variable id=\"var_t\">t</variable>\n  </variables>\n  <block type=\"controls_if\" x=\"50\" y=\"40\">\n    <mutation else=\"1\"></mutation>\n    <value name=\"IF0\">\n      <block type=\"logic_compare\">\n        <field name=\"OP\">LT</field>\n        <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n        <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">2</field></shadow></value>\n      </block>\n    </value>\n    <statement name=\"DO0\">\n      <block type=\"text_print\"><value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value></block>\n    </statement>\n    <statement name=\"ELSE\">\n      <block type=\"variables_set\">\n        <field name=\"VAR\" id=\"var_a\">a</field>\n        <value name=\"VALUE\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n        <next>\n          <block type=\"variables_set\">\n            <field name=\"VAR\" id=\"var_b\">b</field>\n            <value name=\"VALUE\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n            <next>\n              <block type=\"controls_for\">\n                <field name=\"VAR\" id=\"var_i\">i</field>\n                <value name=\"FROM\"><shadow type=\"math_number\"><field name=\"NUM\">2</field></shadow></value>\n                <value name=\"TO\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n                <value name=\"BY\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n                <statement name=\"DO\">\n                  <block type=\"variables_set\">\n                    <field name=\"VAR\" id=\"var_t\">t</field>\n                    <value name=\"VALUE\">\n                      <block type=\"math_arithmetic\">\n                        <field name=\"OP\">ADD</field>\n                        <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n                        <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n                      </block>\n                    </value>\n                    <next>\n                      <block type=\"variables_set\">\n                        <field name=\"VAR\" id=\"var_a\">a</field>\n                        <value name=\"VALUE\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n                        <next>\n                          <block type=\"variables_set\">\n                            <field name=\"VAR\" id=\"var_b\">b</field>\n                            <value name=\"VALUE\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_t\">t</field></block></value>\n                          </block>\n                        </next>\n                      </block>\n                    </next>\n                  </block>\n                </statement>\n                <next><block type=\"text_print\"><value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value></block></next>\n              </block>\n            </next>\n          </block>\n        </next>\n      </block>\n    </statement>\n  </block>\n</xml>",
+    "vars": { "n": 7 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 13, "input": { "n": 7 } },
+      { "expr": "__output__[0]", "equals": 55, "input": { "n": 10 } }
+    ],
+    "blocks": ["variables_set","variables_get","controls_if","logic_compare","controls_for","math_arithmetic","text_print","math_number"]
+  },
+
+  {
+    "id": "fizzbuzz_upto_n",
+    "title": "FizzBuzz up to n",
+    "description": "Print numbers 1..n; Fizz for 3, Buzz for 5, FizzBuzz for both",
+    "difficulty": "2",
+    "audio": "FizzBuzz sequence",
+    "info": "Order matters: check 15 first, then 3, then 5.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"40\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable><variable id=\"var_i\">i</variable></variables>\n  <block type=\"controls_for\" x=\"50\" y=\"50\">\n    <field name=\"VAR\" id=\"var_i\">i</field>\n    <value name=\"FROM\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n    <value name=\"TO\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n    <value name=\"BY\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n    <statement name=\"DO\">\n      <block type=\"controls_if\">\n        <mutation elseif=\"2\"></mutation>\n        <value name=\"IF0\">\n          <block type=\"logic_compare\">\n            <field name=\"OP\">EQ</field>\n            <value name=\"A\">\n              <block type=\"math_modulo\">\n                <value name=\"DIVIDEND\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value>\n                <value name=\"DIVISOR\"><shadow type=\"math_number\"><field name=\"NUM\">15</field></shadow></value>\n              </block>\n            </value>\n            <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n          </block>\n        </value>\n        <statement name=\"DO0\"><block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">FizzBuzz</field></shadow></value></block></statement>\n        <value name=\"IF1\">\n          <block type=\"logic_compare\">\n            <field name=\"OP\">EQ</field>\n            <value name=\"A\">\n              <block type=\"math_modulo\">\n                <value name=\"DIVIDEND\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value>\n                <value name=\"DIVISOR\"><shadow type=\"math_number\"><field name=\"NUM\">3</field></shadow></value>\n              </block>\n            </value>\n            <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n          </block>\n        </value>\n        <statement name=\"DO1\"><block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">Fizz</field></shadow></value></block></statement>\n        <value name=\"IF2\">\n          <block type=\"logic_compare\">\n            <field name=\"OP\">EQ</field>\n            <value name=\"A\">\n              <block type=\"math_modulo\">\n                <value name=\"DIVIDEND\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value>\n                <value name=\"DIVISOR\"><shadow type=\"math_number\"><field name=\"NUM\">5</field></shadow></value>\n              </block>\n            </value>\n            <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n          </block>\n        </value>\n        <statement name=\"DO2\"><block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">Buzz</field></shadow></value></block></statement>\n        <statement name=\"ELSE\"><block type=\"text_print\"><value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value></block></statement>\n      </block>\n    </statement>\n  </block>\n</xml>",
+    "vars": { "n": 5 },
+    "testCases": [
+      { "expr": "__output__.length", "equals": 5, "input": { "n": 5 } },
+      { "expr": "__output__[2]", "equals": "Fizz", "input": { "n": 5 } }
+    ],
+    "blocks": ["variables_get","controls_for","controls_if","logic_compare","math_modulo","text_print","text","math_number"]
+  },
+
+  {
+    "id": "prime_check",
+    "title": "Prime Check",
+    "description": "Print PRIME if n is prime, else NOT PRIME",
+    "difficulty": "2",
+    "audio": "Check for prime",
+    "info": "If n<2 → NOT PRIME. Otherwise test divisors 2..n-1.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"40\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable><variable id=\"var_i\">i</variable><variable id=\"var_isPrime\">isPrime</variable></variables>\n  <block type=\"controls_if\" x=\"50\" y=\"40\">\n    <mutation else=\"1\"></mutation>\n    <value name=\"IF0\">\n      <block type=\"logic_compare\">\n        <field name=\"OP\">LT</field>\n        <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n        <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">2</field></shadow></value>\n      </block>\n    </value>\n    <statement name=\"DO0\"><block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">NOT PRIME</field></shadow></value></block></statement>\n    <statement name=\"ELSE\">\n      <block type=\"variables_set\">\n        <field name=\"VAR\" id=\"var_isPrime\">isPrime</field>\n        <value name=\"VALUE\"><block type=\"logic_boolean\"><field name=\"BOOL\">TRUE</field></block></value>\n        <next>\n          <block type=\"controls_for\">\n            <field name=\"VAR\" id=\"var_i\">i</field>\n            <value name=\"FROM\"><shadow type=\"math_number\"><field name=\"NUM\">2</field></shadow></value>\n            <value name=\"TO\"><block type=\"math_arithmetic\"><field name=\"OP\">MINUS</field><value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value><value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value></block></value>\n            <value name=\"BY\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n            <statement name=\"DO\">\n              <block type=\"controls_if\">\n                <value name=\"IF0\">\n                  <block type=\"logic_compare\">\n                    <field name=\"OP\">EQ</field>\n                    <value name=\"A\"><block type=\"math_modulo\"><value name=\"DIVIDEND\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value><value name=\"DIVISOR\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value></block></value>\n                    <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n                  </block>\n                </value>\n                <statement name=\"DO0\"><block type=\"variables_set\"><field name=\"VAR\" id=\"var_isPrime\">isPrime</field><value name=\"VALUE\"><block type=\"logic_boolean\"><field name=\"BOOL\">FALSE</field></block></value></block></statement>\n              </block>\n            </statement>\n            <next>\n              <block type=\"controls_if\">\n                <mutation else=\"1\"></mutation>\n                <value name=\"IF0\">\n                  <block type=\"logic_compare\">\n                    <field name=\"OP\">EQ</field>\n                    <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_isPrime\">isPrime</field></block></value>\n                    <value name=\"B\"><block type=\"logic_boolean\"><field name=\"BOOL\">TRUE</field></block></value>\n                  </block>\n                </value>\n                <statement name=\"DO0\"><block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">PRIME</field></shadow></value></block></statement>\n                <statement name=\"ELSE\"><block type=\"text_print\"><value name=\"TEXT\"><shadow type=\"text\"><field name=\"TEXT\">NOT PRIME</field></shadow></value></block></statement>\n              </block>\n            </next>\n          </block>\n        </next>\n      </block>\n    </statement>\n  </block>\n</xml>",
+    "vars": { "n": 9 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": "PRIME",     "input": { "n": 2 } },
+      { "expr": "__output__[0]", "equals": "NOT PRIME", "input": { "n": 9 } }
+    ],
+    "blocks": ["variables_set","variables_get","controls_if","logic_compare","logic_boolean","controls_for","math_arithmetic","math_modulo","text_print","text","math_number"]
+  },
+
+  {
+    "id": "gcd",
+    "title": "Greatest Common Divisor",
+    "description": "Print gcd(a, b) using Euclid’s algorithm",
+    "difficulty": "3",
+    "audio": "Compute G C D with modulo loop",
+    "info": "While b ≠ 0: t = a % b; a = b; b = t. Print a.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"30\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n  </block>\n  <block type=\"text_print\" x=\"50\" y=\"90\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable><variable id=\"var_t\">t</variable></variables>\n  <block type=\"controls_whileUntil\" x=\"50\" y=\"40\">\n    <field name=\"MODE\">WHILE</field>\n    <value name=\"BOOL\">\n      <block type=\"logic_compare\">\n        <field name=\"OP\">NEQ</field>\n        <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n        <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n      </block>\n    </value>\n    <statement name=\"DO\">\n      <block type=\"variables_set\">\n        <field name=\"VAR\" id=\"var_t\">t</field>\n        <value name=\"VALUE\"><block type=\"math_modulo\"><value name=\"DIVIDEND\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value><value name=\"DIVISOR\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value></block></value>\n        <next>\n          <block type=\"variables_set\">\n            <field name=\"VAR\" id=\"var_a\">a</field>\n            <value name=\"VALUE\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n            <next>\n              <block type=\"variables_set\">\n                <field name=\"VAR\" id=\"var_b\">b</field>\n                <value name=\"VALUE\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_t\">t</field></block></value>\n              </block>\n            </next>\n          </block>\n        </next>\n      </block>\n    </statement>\n    <next><block type=\"text_print\"><value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value></block></next>\n  </block>\n</xml>",
+    "vars": { "a": 54, "b": 24 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 6, "input": { "a": 54, "b": 24 } },
+      { "expr": "__output__[0]", "equals": 7, "input": { "a": 21, "b": 14 } }
+    ],
+    "blocks": ["variables_set","variables_get","controls_whileUntil","logic_compare","math_modulo","text_print","math_number"]
+  },
+
+  {
+    "id": "lcm",
+    "title": "Least Common Multiple",
+    "description": "Print lcm(a, b) using gcd",
+    "difficulty": "3",
+    "audio": "Compute L C M via product over gcd",
+    "info": "Compute g using Euclid; then print (a0*b0)/g where a0,b0 are originals.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"30\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n  </block>\n  <block type=\"text_print\" x=\"50\" y=\"90\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables>\n    <variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable>\n    <variable id=\"var_a0\">a0</variable><variable id=\"var_b0\">b0</variable>\n    <variable id=\"var_t\">t</variable>\n  </variables>\n  <block type=\"variables_set\" x=\"50\" y=\"30\">\n    <field name=\"VAR\" id=\"var_a0\">a0</field>\n    <value name=\"VALUE\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n    <next>\n      <block type=\"variables_set\">\n        <field name=\"VAR\" id=\"var_b0\">b0</field>\n        <value name=\"VALUE\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n        <next>\n          <block type=\"controls_whileUntil\">\n            <field name=\"MODE\">WHILE</field>\n            <value name=\"BOOL\">\n              <block type=\"logic_compare\">\n                <field name=\"OP\">NEQ</field>\n                <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n                <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n              </block>\n            </value>\n            <statement name=\"DO\">\n              <block type=\"variables_set\">\n                <field name=\"VAR\" id=\"var_t\">t</field>\n                <value name=\"VALUE\"><block type=\"math_modulo\"><value name=\"DIVIDEND\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value><value name=\"DIVISOR\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value></block></value>\n                <next>\n                  <block type=\"variables_set\">\n                    <field name=\"VAR\" id=\"var_a\">a</field>\n                    <value name=\"VALUE\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n                    <next>\n                      <block type=\"variables_set\">\n                        <field name=\"VAR\" id=\"var_b\">b</field>\n                        <value name=\"VALUE\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_t\">t</field></block></value>\n                      </block>\n                    </next>\n                  </block>\n                </next>\n              </block>\n            </statement>\n            <next>\n              <block type=\"text_print\">\n                <value name=\"TEXT\">\n                  <block type=\"math_arithmetic\">\n                    <field name=\"OP\">DIVIDE</field>\n                    <value name=\"A\">\n                      <block type=\"math_arithmetic\">\n                        <field name=\"OP\">MULTIPLY</field>\n                        <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a0\">a0</field></block></value>\n                        <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b0\">b0</field></block></value>\n                      </block>\n                    </value>\n                    <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n                  </block>\n                </value>\n              </block>\n            </next>\n          </block>\n        </next>\n      </block>\n    </next>\n  </block>\n</xml>",
+    "vars": { "a": 4, "b": 6 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 12, "input": { "a": 4,  "b": 6 } },
+      { "expr": "__output__[0]", "equals": 42, "input": { "a": 21, "b": 6 } }
+    ],
+    "blocks": ["variables_set","variables_get","controls_whileUntil","logic_compare","math_modulo","math_arithmetic","text_print","math_number"]
+  },
+
+  {
+    "id": "power_iterative",
+    "title": "Power a^b",
+    "description": "Print a raised to the power b (b ≥ 0) using a loop",
+    "difficulty": "2",
+    "audio": "Compute power iteratively",
+    "info": "Initialize res=1 and multiply res by a, b times.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"30\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n  </block>\n  <block type=\"text_print\" x=\"50\" y=\"90\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_a\">a</variable><variable id=\"var_b\">b</variable><variable id=\"var_i\">i</variable><variable id=\"var_res\">res</variable></variables>\n  <block type=\"variables_set\" x=\"50\" y=\"40\">\n    <field name=\"VAR\" id=\"var_res\">res</field>\n    <value name=\"VALUE\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n    <next>\n      <block type=\"controls_for\">\n        <field name=\"VAR\" id=\"var_i\">i</field>\n        <value name=\"FROM\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n        <value name=\"TO\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_b\">b</field></block></value>\n        <value name=\"BY\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n        <statement name=\"DO\">\n          <block type=\"variables_set\">\n            <field name=\"VAR\" id=\"var_res\">res</field>\n            <value name=\"VALUE\">\n              <block type=\"math_arithmetic\">\n                <field name=\"OP\">MULTIPLY</field>\n                <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_res\">res</field></block></value>\n                <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_a\">a</field></block></value>\n              </block>\n            </value>\n          </block>\n        </statement>\n        <next><block type=\"text_print\"><value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_res\">res</field></block></value></block></next>\n      </block>\n    </next>\n  </block>\n</xml>",
+    "vars": { "a": 2, "b": 5 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 32, "input": { "a": 2, "b": 5 } },
+      { "expr": "__output__[0]", "equals": 81, "input": { "a": 3, "b": 4 } }
+    ],
+    "blocks": ["variables_set","variables_get","controls_for","math_arithmetic","text_print","math_number"]
+  },
+
+  {
+    "id": "count_evens_0_to_n",
+    "title": "Count Evens 0..n",
+    "description": "Print all even numbers from 0 to n inclusive",
+    "difficulty": "2",
+    "audio": "Print even numbers up to n",
+    "info": "Use modulo inside a loop and print when i % 2 == 0.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"40\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable><variable id=\"var_i\">i</variable></variables>\n  <block type=\"controls_for\" x=\"50\" y=\"50\">\n    <field name=\"VAR\" id=\"var_i\">i</field>\n    <value name=\"FROM\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n    <value name=\"TO\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n    <value name=\"BY\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n    <statement name=\"DO\">\n      <block type=\"controls_if\">\n        <value name=\"IF0\">\n          <block type=\"logic_compare\">\n            <field name=\"OP\">EQ</field>\n            <value name=\"A\"><block type=\"math_modulo\"><value name=\"DIVIDEND\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value><value name=\"DIVISOR\"><shadow type=\"math_number\"><field name=\"NUM\">2</field></shadow></value></block></value>\n            <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n          </block>\n        </value>\n        <statement name=\"DO0\"><block type=\"text_print\"><value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value></block></statement>\n      </block>\n    </statement>\n  </block>\n</xml>",
+    "vars": { "n": 10 },
+    "testCases": [
+      { "expr": "__output__.length", "equals": 6, "input": { "n": 10 } },
+      { "expr": "__output__.length", "equals": 3, "input": { "n": 4 } }
+    ],
+    "blocks": ["variables_get","controls_for","controls_if","logic_compare","math_modulo","text_print","math_number"]
+  },
+
+  {
+    "id": "collatz_steps",
+    "title": "Collatz Steps",
+    "description": "Print the number of steps to reach 1 under the Collatz rule",
+    "difficulty": "3",
+    "audio": "Collatz steps to one",
+    "info": "While x ≠ 1: x = (even? x/2 : 3x+1), steps++.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"40\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable><variable id=\"var_x\">x</variable><variable id=\"var_steps\">steps</variable></variables>\n  <block type=\"variables_set\" x=\"50\" y=\"40\">\n    <field name=\"VAR\" id=\"var_steps\">steps</field>\n    <value name=\"VALUE\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n    <next>\n      <block type=\"variables_set\">\n        <field name=\"VAR\" id=\"var_x\">x</field>\n        <value name=\"VALUE\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n        <next>\n          <block type=\"controls_whileUntil\">\n            <field name=\"MODE\">WHILE</field>\n            <value name=\"BOOL\">\n              <block type=\"logic_compare\">\n                <field name=\"OP\">NEQ</field>\n                <value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_x\">x</field></block></value>\n                <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n              </block>\n            </value>\n            <statement name=\"DO\">\n              <block type=\"controls_if\">\n                <value name=\"IF0\">\n                  <block type=\"logic_compare\">\n                    <field name=\"OP\">EQ</field>\n                    <value name=\"A\"><block type=\"math_modulo\"><value name=\"DIVIDEND\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_x\">x</field></block></value><value name=\"DIVISOR\"><shadow type=\"math_number\"><field name=\"NUM\">2</field></shadow></value></block></value>\n                    <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n                  </block>\n                </value>\n                <statement name=\"DO0\">\n                  <block type=\"variables_set\">\n                    <field name=\"VAR\" id=\"var_x\">x</field>\n                    <value name=\"VALUE\"><block type=\"math_arithmetic\"><field name=\"OP\">DIVIDE</field><value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_x\">x</field></block></value><value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">2</field></shadow></value></block></value>\n                  </block>\n                </statement>\n                <statement name=\"ELSE\">\n                  <block type=\"variables_set\">\n                    <field name=\"VAR\" id=\"var_x\">x</field>\n                    <value name=\"VALUE\">\n                      <block type=\"math_arithmetic\">\n                        <field name=\"OP\">ADD</field>\n                        <value name=\"A\">\n                          <block type=\"math_arithmetic\">\n                            <field name=\"OP\">MULTIPLY</field>\n                            <value name=\"A\"><shadow type=\"math_number\"><field name=\"NUM\">3</field></shadow></value>\n                            <value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_x\">x</field></block></value>\n                          </block>\n                        </value>\n                        <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n                      </block>\n                    </value>\n                  </block>\n                </statement>\n                <next>\n                  <block type=\"variables_set\">\n                    <field name=\"VAR\" id=\"var_steps\">steps</field>\n                    <value name=\"VALUE\"><block type=\"math_arithmetic\"><field name=\"OP\">ADD</field><value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_steps\">steps</field></block></value><value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value></block></value>\n                  </block>\n                </next>\n              </block>\n            </statement>\n            <next><block type=\"text_print\"><value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_steps\">steps</field></block></value></block></next>\n          </block>\n        </next>\n      </block>\n    </next>\n  </block>\n</xml>",
+    "vars": { "n": 10 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 6, "input": { "n": 10 } },
+      { "expr": "__output__[0]", "equals": 7, "input": { "n": 5 } }
+    ],
+    "blocks": ["variables_set","variables_get","controls_whileUntil","controls_if","logic_compare","math_arithmetic","math_modulo","text_print","math_number"]
+  },
+
+  {
+    "id": "range_sum_even_only",
+    "title": "Sum of Even Numbers 1..n",
+    "description": "Print the sum of even numbers from 1 to n",
+    "difficulty": "2",
+    "audio": "Sum evens to n",
+    "info": "Accumulate only when i % 2 == 0.",
+    "starter": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable></variables>\n  <block type=\"text_print\" x=\"50\" y=\"40\">\n    <value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n  </block>\n</xml>",
+    "solution": "<xml xmlns=\"https://developers.google.com/blockly/xml\">\n  <variables><variable id=\"var_n\">n</variable><variable id=\"var_i\">i</variable><variable id=\"var_sum\">sum</variable></variables>\n  <block type=\"variables_set\" x=\"50\" y=\"40\">\n    <field name=\"VAR\" id=\"var_sum\">sum</field>\n    <value name=\"VALUE\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n    <next>\n      <block type=\"controls_for\">\n        <field name=\"VAR\" id=\"var_i\">i</field>\n        <value name=\"FROM\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n        <value name=\"TO\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_n\">n</field></block></value>\n        <value name=\"BY\"><shadow type=\"math_number\"><field name=\"NUM\">1</field></shadow></value>\n        <statement name=\"DO\">\n          <block type=\"controls_if\">\n            <value name=\"IF0\">\n              <block type=\"logic_compare\">\n                <field name=\"OP\">EQ</field>\n                <value name=\"A\"><block type=\"math_modulo\"><value name=\"DIVIDEND\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value><value name=\"DIVISOR\"><shadow type=\"math_number\"><field name=\"NUM\">2</field></shadow></value></block></value>\n                <value name=\"B\"><shadow type=\"math_number\"><field name=\"NUM\">0</field></shadow></value>\n              </block>\n            </value>\n            <statement name=\"DO0\">\n              <block type=\"variables_set\">\n                <field name=\"VAR\" id=\"var_sum\">sum</field>\n                <value name=\"VALUE\"><block type=\"math_arithmetic\"><field name=\"OP\">ADD</field><value name=\"A\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_sum\">sum</field></block></value><value name=\"B\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_i\">i</field></block></value></block></value>\n              </block>\n            </statement>\n          </block>\n        </statement>\n        <next><block type=\"text_print\"><value name=\"TEXT\"><block type=\"variables_get\"><field name=\"VAR\" id=\"var_sum\">sum</field></block></value></block></next>\n      </block>\n    </next>\n  </block>\n</xml>",
+    "vars": { "n": 10 },
+    "testCases": [
+      { "expr": "__output__[0]", "equals": 30, "input": { "n": 10 } },
+      { "expr": "__output__[0]", "equals": 6,  "input": { "n": 4 } }
+    ],
+    "blocks": ["variables_set","variables_get","controls_for","controls_if","logic_compare","math_modulo","math_arithmetic","text_print","math_number"]
+  }
+]

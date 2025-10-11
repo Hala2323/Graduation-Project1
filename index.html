@@ -1,60 +1,302 @@
 <!doctype html>
-<html>
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="utf-8" />
-    <title>Blockly Code Runner + Tests</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    <title>Interactive Challenges — Blockly 12.3.1 with LocalStorage Snapshots</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" href="data:,">
     <style>
-        * { box-sizing: border-box; }
-        html, body { height: 100%; margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-        #page { display: flex; height: 100vh; width: 100vw; }
-        #left {
-            width: 420px; flex: 0 0 420px; padding: 12px; border-right: 1px solid #e5e7eb;
-            display: flex; flex-direction: column; gap: 8px; overflow: auto;
+        :root{
+            --bg:#0b1220; --bg-2:#0f172a; --panel:#0b1324; --muted:#94a3b8;
+            --text:#e5e7eb; --text-2:#cbd5e1;
+            --accent:#22d3ee; --accent-2:#60a5fa;
+            --border:#1f2937; --btn:#2a3346; --btn-h:#313b52;
+            --pass-bg:#093a1f; --pass-fg:#22c55e; --fail-bg:#3b0b0b; --fail-fg:#b91c1c;
+            --code-bg:#091021; --console-bg:#0a0a0a; --console-fg:#10ff70;
+            --shadow:0 10px 24px rgba(0,0,0,.4);
         }
-        label { font-size: 12px; color: #374151; }
-        .box {
-            width: 100%; resize: vertical;
-            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-            font-size: 12px; line-height: 1.4; padding: 8px;
-            border: 1px solid #d1d5db; border-radius: 6px; background: #f8fafc;
+        [data-theme="dark"]{
+            --bg:#0b1220; --bg-2:#0f172a; --panel:#0b1324; --muted:#94a3b8;
+            --text:#e5e7eb; --text-2:#cbd5e1;
+            --border:#1f2937; --btn:#2a3346; --btn-h:#313b52;
+            --code-bg:#091021; --console-bg:#0a0a0a; --console-fg:#10ff70;
+            --pass-bg:#093a1f; --pass-fg:#22c55e; --fail-bg:#3b0b0b; --fail-fg:#ef4444;
+            --shadow:0 10px 24px rgba(0,0,0,.4);
         }
-        #codeBox { height: 8rem; }
-        #testsBox { height: 10rem; }
-        .btn { padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 6px; background: #ffffff; cursor: pointer; }
-        #output, #testResults {
-            min-height: 100px; max-height: 50vh; overflow: auto;
-            border: 1px solid #e5e7eb; border-radius: 6px; background: #f9fafb;
-            padding: 8px; white-space: pre-wrap; word-break: break-word; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px;
+        [data-theme="light"]{
+            --bg:#f8fafc; --bg-2:#ffffff; --panel:#ffffff; --muted:#475569;
+            --text:#0f172a; --text-2:#334155;
+            --border:#e2e8f0; --btn:#f1f5f9; --btn-h:#e2e8f0;
+            --code-bg:#f8fafc; --console-bg:#0b1220; --console-fg:#10ff70;
+            --pass-bg:#e6f6ea; --pass-fg:#15803d; --fail-bg:#fee2e2; --fail-fg:#b91c1c;
+            --shadow:0 10px 24px rgba(0,0,0,.08);
         }
-        #blocklyDiv { flex: 1 1 auto; height: 100vh; }
+
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{
+            font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background:var(--bg-2); color:var(--text);
+            display:flex; flex-direction:column; height:100vh; overflow:hidden;
+        }
+
+        .top-nav{
+            background:var(--panel); border-bottom:1px solid var(--border);
+            padding:10px 15px; display:flex; justify-content:space-between; align-items:center; gap:8px
+        }
+        .nav-buttons{display:flex; gap:8px; align-items:center}
+        .nav-btn{
+            padding:8px 14px; background:var(--btn); border:1px solid var(--border);
+            color:var(--text); border-radius:10px; font-size:13px; cursor:pointer;
+        }
+        .nav-btn:hover{background:var(--btn-h)}
+        .nav-select, .nav-color{
+            padding:8px 10px; background:var(--btn); border:1px solid var(--border);
+            color:var(--text); border-radius:10px; font-size:13px; cursor:pointer;
+        }
+        .nav-color{width:42px; height:36px; padding:0}
+
+        .main-layout{display:flex; flex:1; overflow:hidden}
+        .sidebar-left{
+            width:240px; background:var(--panel); border-right:1px solid var(--border);
+            overflow-y:auto; flex-shrink:0;
+        }
+        .sidebar-header{
+            padding:14px 16px; background:rgba(255,255,255,0.02);
+            border-bottom:1px solid var(--border); font-weight:700; font-size:14px; text-align:center; color:var(--text-2);
+        }
+        .challenge-item{
+            padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.03);
+            cursor:pointer; font-size:13px; background:transparent; color:var(--text-2);
+        }
+        .challenge-item:hover{background:rgba(255,255,255,0.04)}
+        .challenge-item.active{
+            background:rgba(34,211,238,0.12); border-left:4px solid var(--accent); color:var(--text);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+        .challenge-item.solved::after{content:' ✓'; color:var(--pass-fg); font-weight:700}
+
+        .center-area{flex:1; display:flex; flex-direction:column; overflow:hidden; background:var(--bg)}
+        .challenge-header{padding:18px 20px; border-bottom:1px solid var(--border)}
+        .challenge-header h2{font-size:18px; margin-bottom:6px; color:var(--text)}
+        .challenge-header p{font-size:13px; color:var(--muted)}
+        .difficulty{font-size:12px; color:var(--muted); margin-top:6px}
+
+        .blockly-container{flex:1; border-bottom:1px solid var(--border); position:relative; background:var(--bg)}
+        #blocklyDiv{position:absolute; width:100%; height:100%}
+
+        .bottom-panel{display:flex; height:45%; border-top:1px solid var(--border)}
+        .left-output{width:100%; display:flex; flex-direction:column; overflow:hidden}
+
+        .panel-section{display:flex; flex-direction:column; overflow:hidden; background:var(--panel)}
+        .panel-header{
+            padding:10px 12px; background:rgba(255,255,255,0.04); border-bottom:1px solid var(--border);
+            font-weight:700; font-size:12px; display:flex; align-items:center; gap:8px; color:var(--text-2);
+        }
+        [data-theme="light"] .panel-header{ background:rgba(0,0,0,0.035); }
+        .panel-title{letter-spacing:.02em}
+        .panel-content{
+            flex:1; overflow-y:auto; padding:10px; font-family:'Courier New', monospace; font-size:12px;
+            background:var(--panel); white-space:pre-wrap; line-height:1.5; color:var(--text);
+        }
+        .code-output{background:var(--code-bg); color:var(--text)}
+        .console-output{background:var(--console-bg); color:var(--console-fg)}
+
+        .run-button,.submit-button{
+            padding:6px 12px; color:#001014; border:none; border-radius:10px; font-size:12px; cursor:pointer; font-weight:800;
+        }
+        .run-button{ background:var(--accent); margin-left:auto; }
+        .run-button:hover{ filter:brightness(0.95) }
+        .submit-button{ background:var(--accent-2) }
+        .submit-button:hover{ filter:brightness(0.95) }
+
+        .toggle-btn{
+            margin-left:8px; padding:6px 10px; font-size:12px; border:1px solid var(--border);
+            background:transparent; color:var(--text-2); border-radius:10px; cursor:pointer;
+        }
+        .toggle-btn:hover{background:rgba(255,255,255,0.06)}
+        .collapsible.collapsed{
+            flex:0 0 0 !important; height:0 !important; padding:0 !important; margin:0 !important; border:0 !important;
+        }
+        .collapsible.collapsed .panel-header,
+        .collapsible.collapsed .panel-content{ display:none !important; }
+
+        #inputsBox .row{display:flex; align-items:center; gap:10px; margin-bottom:10px}
+        #inputsBox label{min-width:110px; color:var(--text-2); font-size:12px}
+        #inputsBox input{
+            flex:1; padding:10px 12px; border:1px solid var(--border); border-radius:10px;
+            background:#0b0f1a; color:var(--text); outline:none;
+        }
+        [data-theme="light"] #inputsBox input{ background:#ffffff; }
+        #inputsBox input:focus{border-color:var(--accent)}
+
+        .modal{position:fixed; inset:0; background:rgba(2,6,23,.65); display:none; align-items:center; justify-content:center; padding:24px; z-index:1000}
+        .modal.open{display:flex}
+        .modal-card{width:min(900px,95vw); max-height:85vh; background:var(--panel); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow); display:flex; flex-direction:column; overflow:hidden}
+        .modal-header{padding:12px 16px; background:#0f172a; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px}
+        [data-theme="light"] .modal-header{ background:#f1f5f9; }
+        .modal-title{font-weight:800; font-size:14px; color:var(--text)}
+        .modal-body{padding:12px 16px; overflow:auto}
+        .modal-footer{padding:10px 16px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px}
+        .close-btn{padding:8px 12px; border:1px solid var(--border); background:transparent; color:var(--text-2); border-radius:10px; cursor:pointer; font-size:12px}
+        .close-btn:hover{background:rgba(255,255,255,0.06)}
+        .summary{display:flex; align-items:center; gap:8px; margin-left:auto; font-size:13px; color:var(--text-2)}
+        .badge{display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:900}
+        .badge-pass{background:var(--pass-bg); color:var(--pass-fg)}
+        .badge-fail{background:var(--fail-bg); color:var(--fail-fg)}
+        .test-list{display:grid; gap:10px}
+
+
+        .test-item{
+            display:grid;
+            grid-template-columns: 1.2fr 1fr 1fr 40px;
+            gap:10px;
+            align-items:center;
+            border:1px solid var(--border);
+            border-radius:12px;
+            padding:12px 14px;
+            background:#0b0f1a;
+        }
+        [data-theme="light"] .test-item{ background:#ffffff; }
+        .test-cell{min-width:0}
+        .test-label{
+            font-size:11px;
+            color:var(--muted);
+            letter-spacing:.02em;
+            margin-bottom:4px;
+        }
+        .test-code{
+            font-family:ui-monospace,Menlo,Consolas,"Courier New",monospace;
+            font-size:12px;
+            white-space:pre-wrap;
+            word-break:break-word;
+            color:var(--text);
+        }
+        .status{
+            justify-self:center;
+            width:28px; height:28px;
+            border-radius:999px;
+            display:flex; align-items:center; justify-content:center;
+            font-weight:900; font-size:14px;
+            border:1px solid var(--border);
+        }
+        .status.pass{ background:var(--pass-bg); color:var(--pass-fg); }
+        .status.fail{ background:var(--fail-bg); color:var(--fail-fg); }
+
+
+        .blocklyToolboxDiv{
+            background:#0e1628 !important;
+            border-right:1px solid var(--border) !important;
+            backdrop-filter: blur(6px);
+        }
+        [data-theme="light"] .blocklyToolboxDiv{ background:#ffffff !important; }
+        .blocklyTreeRow{ border-radius:10px; margin:4px 6px; padding:8px 10px !important; }
+        .blocklyTreeRow:hover{ background:rgba(255,255,255,0.06) !important; }
+        [data-theme="light"] .blocklyTreeRow:hover{ background:rgba(0,0,0,0.06) !important; }
+        .blocklyTreeSelected{ background:rgba(34,211,238,0.18) !important; }
+        .blocklyFlyoutBackground{ fill:#0b1220 !important; fill-opacity:1 !important; }
+        [data-theme="light"] .blocklyFlyoutBackground{ fill:#f8fafc !important; }
+        .blocklyMainBackground{ stroke:#1f2937 !important; }
+        .blocklyScrollbarHandle{ fill:#2f3b53 !important; }
+        .blocklyScrollbarBackground{ fill:#0b1220 !important; fill-opacity:1 !important; }
+        [data-theme="light"] .blocklyScrollbarBackground{ fill:#f8fafc !important; }
+
+        @media (max-width: 900px){
+            .sidebar-left{width:200px}
+            .bottom-panel{height:55%}
+            .test-item{grid-template-columns: 1fr 1fr 1fr 36px}
+        }
     </style>
 </head>
 <body>
-<div id="page">
-    <div id="left">
-        <label for="codeBox">Generated code</label>
-        <textarea id="codeBox" class="box" rows="6" spellcheck="false"></textarea>
-        <button id="runBtn" class="btn" title="Run generated code">Run ▶</button>
+<div class="top-nav">
+    <div class="nav-buttons">
+        <button class="nav-btn" id="prevBtn">← Previous</button>
+        <button class="nav-btn" id="nextBtn">Next →</button>
+    </div>
+    <div class="nav-buttons">
+        <button class="nav-btn" id="toggleCodeGlobalBtn">Show Code</button>
+        <button class="nav-btn" id="resetBtn">Reset</button>
+        <button class="nav-btn" id="solveBtn">Solve</button>
+        <button class="nav-btn" id="submitBtn">Submit</button>
+        <button class="nav-btn" id="audioBtn">Read</button>
+        <button class="nav-btn" id="saveBtn">Save</button>
+        <button class="nav-btn" id="restoreBtn">Restore</button>
+        <button class="nav-btn" id="clearBtn">Clear</button>
+        <select id="themeSelect" class="nav-select" title="Theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+        </select>
+        <input id="accentPicker" class="nav-color" type="color" value="#22d3ee" title="Accent color"/>
+    </div>
+</div>
 
-        <label>Output</label>
-        <div id="output"></div>
-
-        <label for="testsBox">Tests (use <code>__output__</code> for printed lines)</label>
-        <textarea id="testsBox" class="box" rows="10" spellcheck="false">[
-  { "expr": "__output__[0]", "equals": "Hello, world!" }
-]</textarea>
-        <button id="runTestsBtn" class="btn" title="Run tests">Run Tests ✓</button>
-
-        <label>Test Results</label>
-        <div id="testResults"></div>
+<div class="main-layout">
+    <div class="sidebar-left">
+        <div class="sidebar-header">Challenges</div>
+        <div id="challengeList"></div>
     </div>
 
-    <div id="blocklyDiv"></div>
+    <div class="center-area">
+        <div id="welcomeScreen" style="padding:40px; text-align:center;">
+            <h2 style="color:var(--text); margin-bottom:12px;">Interactive Challenges</h2>
+            <p style="color:var(--muted); max-width:520px; margin:0 auto;">Pick a challenge on the left. Build with blocks. Submit to see results.</p>
+        </div>
+
+        <div id="workArea" style="display:none; flex:1; flex-direction:column;">
+            <div class="challenge-header">
+                <h2 id="challengeTitle">Challenge Title</h2>
+                <p id="challengeDesc">Challenge description goes here.</p>
+                <div class="difficulty">Difficulty: <span id="challengeDiff">Easy</span></div>
+            </div>
+
+            <div class="blockly-container"><div id="blocklyDiv"></div></div>
+
+            <div class="bottom-panel">
+                <div class="left-output">
+                    <div class="panel-section" style="flex:0 0 auto; border-bottom:1px solid var(--border);">
+                        <div class="panel-header">
+                            <span class="panel-title">Inputs</span>
+                            <button class="run-button" id="runBtn">Run ▶</button>
+                            <button class="submit-button" id="submitBtnInline">Submit</button>
+                        </div>
+                        <div class="panel-content" id="inputsBox">No inputs for this challenge.</div>
+                    </div>
+
+                    <div class="panel-section collapsible collapsed" id="codeSection" style="flex:1; border-bottom:1px solid var(--border);">
+                        <div class="panel-header">
+                            <span class="panel-title">Generated code</span>
+                            <button class="toggle-btn" id="toggleCodeBtn" title="Show/Hide code">Show</button>
+                        </div>
+                        <div class="panel-content code-output" id="codeBox">// Code will appear here</div>
+                    </div>
+
+                    <div class="panel-section" style="flex:1;">
+                        <div class="panel-header"><span class="panel-title">Output</span></div>
+                        <div class="panel-content console-output" id="outputBox">Run your code to see results here.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="resultsModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="resultsTitle">
+        <div class="modal-header">
+            <span class="modal-title" id="resultsTitle">Submission Results</span>
+            <span id="resultsSummary" class="summary"></span>
+        </div>
+        <div class="modal-body">
+            <div id="resultsList" class="test-list"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="close-btn" id="closeResultsBtn">Close</button>
+        </div>
+    </div>
 </div>
 
 <iframe id="runner" sandbox="allow-scripts" src="sandbox.html" style="display:none"></iframe>
+
 <script src="app.js"></script>
 </body>
 </html>

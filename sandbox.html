@@ -1,76 +1,75 @@
+<!-- sandbox.html -->
 <!doctype html>
-<meta charset="utf-8" />
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
 <script>
     (function () {
-
-        const logs = [];
-        console.log = (...args) => { logs.push(args.map(String).join(' ')); };
-        window.alert = (msg) => { logs.push(String(msg)); };
-
-
         function deepEqual(a, b) {
             if (a === b) return true;
             if (Number.isNaN(a) && Number.isNaN(b)) return true;
-            if (a && b && typeof a === 'object' && typeof b === 'object') {
-                if (a.constructor !== b.constructor) return false;
-                if (Array.isArray(a)) {
-                    if (a.length !== b.length) return false;
-                    for (let i = 0; i < a.length; i++) if (!deepEqual(a[i], b[i])) return false;
-                    return true;
-                }
-                const ak = Object.keys(a), bk = Object.keys(b);
-                if (ak.length !== bk.length) return false;
-                for (const k of ak) if (!deepEqual(a[k], b[k])) return false;
+            if (typeof a !== typeof b) return false;
+            if (a && b && typeof a === 'object') {
+                const ka = Object.keys(a), kb = Object.keys(b);
+                if (ka.length !== kb.length) return false;
+                for (const k of ka) if (!deepEqual(a[k], b[k])) return false;
                 return true;
             }
             return false;
         }
 
-        function runUserCode(code) {
-            logs.length = 0;
+        function runWith(globals, code) {
+            const names = Object.keys(globals || {});
+            const args  = names.map(k => globals[k]);
 
-            new Function(code)();
+            const normalized = String(code || '')
+                .replace(/\bwindow\.alert\s*\(/g, 'console.log(')
+                .replace(/\balert\s*\(/g, 'console.log(');
+
+            const out = [];
+            const origLog = console.log;
+            console.log = (...xs) => { out.push(xs.length === 1 ? xs[0] : xs.join(' ')); };
+            self.__output__ = out;
+
+            try {
+                const fn = new Function(...names, '"use strict";\n' + normalized);
+                fn(...args);
+            } catch (e) {
+                out.push('Execution Error: ' + (e && e.message ? e.message : String(e)));
+            } finally {
+                console.log = origLog;
+            }
+            return out;
         }
 
-
-        function evalExpr(expr, context) {
-            const keys = Object.keys(context || {});
-            const vals = keys.map(k => context[k]);
-
-            return new Function(...keys, 'return (' + expr + ');')(...vals);
-        }
-
-        addEventListener('message', (e) => {
-            const data = e.data || {};
-            if (data.type === 'run') {
-                try {
-                    runUserCode(data.code || '');
-                    parent.postMessage({ type: 'log', payload: logs.slice() }, '*');
-                } catch (err) {
-                    parent.postMessage({ type: 'log', payload: ['Error: ' + err.message] }, '*');
-                }
-            } else if (data.type === 'test') {
+        onmessage = (e) => {
+            const d = e.data || {};
+            if (d.type === 'run') {
+                const out = runWith(d.globals || {}, d.code || '');
+                parent.postMessage({ type: 'log', payload: out }, '*');
+                return;
+            }
+            if (d.type === 'test') {
+                const code = d.code || '';
+                const base = d.baseGlobals || {};
                 const results = [];
-                try {
-                    runUserCode(data.code || '');
-                    const __output__ = logs.slice();
-                    const cases = Array.isArray(data.cases) ? data.cases : [];
-                    for (const c of cases) {
-                        const expr = String(c.expr ?? '');
-                        try {
-                            const actual = evalExpr(expr, { __output__ });
-                            const expected = 'equals' in c ? c.equals : c.expected;
-                            const pass = deepEqual(actual, expected);
-                            results.push({ expr, pass, expected, actual });
-                        } catch (err) {
-                            results.push({ expr, pass: false, expected: c.equals ?? c.expected, actual: undefined, error: err.message });
-                        }
-                    }
-                } catch (err) {
-                    results.push({ expr: '<program>', pass: false, expected: 'program to run', actual: 'crash', error: err.message });
+                for (const c of (d.cases || [])) {
+                    const globals = Object.assign({}, base, c.input || {});
+                    let actual, passed = false, error = null;
+                    try {
+                        runWith(globals, code);
+                        actual = (new Function('"use strict"; return (' + c.expr + ')'))();
+                        passed = deepEqual(actual, c.equals);
+                    } catch (err) { error = err && err.message ? err.message : String(err); }
+                    results.push({ pass: passed, expr: c.expr, expected: c.equals, actual, error });
                 }
                 parent.postMessage({ type: 'testResult', results }, '*');
             }
-        });
+        };
     })();
 </script>
+</body>
+</html>
