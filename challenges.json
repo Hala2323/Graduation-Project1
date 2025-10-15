@@ -27,7 +27,7 @@
     "vars": { "name": "Alice" },
     "testCases": [
       { "expr": "__output__[0]", "equals": "Hello, Alice!" },
-      //{ "expr": "__output__[1]", "equals": "Hello, Ada!", "input": { "name": "Ada" } }
+      { "expr": "__output__[1]", "equals": "Hello, Ada!", "input": { "name": "Ada" } }
     ],
     "blocks": ["text_print","text","text_join","variables_get"]
   },
@@ -367,5 +367,5 @@
       { "expr": "__output__[0]", "equals": 6,  "input": { "n": 4 } }
     ],
     "blocks": ["variables_set","variables_get","controls_for","controls_if","logic_compare","math_modulo","math_arithmetic","text_print","math_number"]
-  }
+  },
 ]
