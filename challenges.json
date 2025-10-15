@@ -28,7 +28,7 @@
     "vars": { "name": "Ada" },
     "testCases": [
       { "expr": "__output__[0]", "equals": "Hello, Alice!" },
-      { "expr": "__output__[0]", "equals": "Hello, Ada!", "input": { "name": "Ada" } }
+      { "expr": "__output__[1]", "equals": "Hello, Ada!", "input": { "name": "Ada" } }
     ],
     "blocks": ["text_print","text","text_join","variables_get"]
   },
