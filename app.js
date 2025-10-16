@@ -38,6 +38,16 @@ async function bootApp(){
         alert('Failed to load challenges.json');
     }
 
+    // If we changed starters for some challenges, old saved workspaces in localStorage
+    // may include pre-attached blocks that break tests (e.g. FizzBuzz printing n before the loop).
+    // Clear saved snapshots for the listed challenge ids so users see the updated starter.
+    try{
+        const idsToReset = [
+            'print_number','echo_text','sum_two','difference_two','product_two','divide_two','countdown','fizzbuzz_upto_n'
+        ];
+        idsToReset.forEach(id => { try{ LS.del(kWS(id)); }catch(e){} });
+    }catch(e){}
+
     Blockly.JavaScript['text_print'] = function(block){
         const msg=Blockly.JavaScript.valueToCode(block,'TEXT',Blockly.JavaScript.ORDER_NONE)||"''";
         return 'console.log('+msg+');\n';
@@ -141,6 +151,7 @@ async function bootApp(){
 
     const themeSelect = document.getElementById('themeSelect');
     const accentPicker = document.getElementById('accentPicker');
+    const categoryFilter = document.getElementById('categoryFilter');
 
     let workspace = null;
     let currentIndex = -1;
@@ -305,14 +316,43 @@ async function bootApp(){
     function updateSidebar() {
         const list = document.getElementById('challengeList');
         list.innerHTML = '';
-        challenges.forEach((ch, i) => {
+        // filter by selected category
+        const sel = LS.get('ui.category') || 'all';
+        const visible = challenges.map((ch, i) => ({ch, i})).filter(({ch}) => sel === 'all' || (ch.category || '').toLowerCase() === sel.toLowerCase());
+        if (!visible.length) {
+            const empty = document.createElement('div'); empty.className='challenge-item'; empty.textContent = 'No challenges in this category.'; list.appendChild(empty); return;
+        }
+        visible.forEach(({ch, i}) => {
             const div = document.createElement('div');
             div.className = 'challenge-item';
             if (i === currentIndex) div.classList.add('active');
             if (solvedChallenges.has(ch.id)) div.classList.add('solved');
-            div.textContent = ch.title;
+            div.textContent = ch.title + (ch.category ? ` — ${ch.category}` : '');
             div.onclick = () => loadChallenge(i);
             list.appendChild(div);
+        });
+    }
+
+    function collectCategories(){
+        const set = new Set();
+        challenges.forEach(ch => { if (ch.category) set.add(ch.category); });
+        return Array.from(set).sort((a,b)=>a.localeCompare(b));
+    }
+
+    function populateCategoryFilter(){
+        if (!categoryFilter) return;
+        const cats = collectCategories();
+        // preserve previous selection
+        const prev = LS.get('ui.category') || 'all';
+        categoryFilter.innerHTML = '<option value="all">All</option>' + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+        categoryFilter.value = prev;
+        categoryFilter.addEventListener('change', ()=>{
+            LS.set('ui.category', categoryFilter.value);
+            updateSidebar();
+            // if currentIndex not visible, jump to first visible
+            const sel = LS.get('ui.category') || 'all';
+            const visibleIdx = challenges.findIndex(ch => sel === 'all' || (ch.category||'').toLowerCase() === sel.toLowerCase());
+            if (visibleIdx >= 0) loadChallenge(visibleIdx);
         });
     }
 
@@ -449,8 +489,7 @@ async function bootApp(){
     document.getElementById('closeResultsBtn').addEventListener('click', closeResultsModal);
     document.getElementById('resultsModal').addEventListener('click', (e) => { if (e.target.id === 'resultsModal') closeResultsModal(); });
 
-    document.getElementById('prevBtn').addEventListener('click', () => { if (currentIndex > 0) loadChallenge(currentIndex - 1); });
-    document.getElementById('nextBtn').addEventListener('click', () => { if (currentIndex < challenges.length - 1) loadChallenge(currentIndex + 1); });
+    // prev/next handlers are registered later to respect category filtering
 
     document.getElementById('audioBtn').addEventListener('click', () => {
         if (currentIndex < 0) return;
@@ -533,6 +572,7 @@ async function bootApp(){
             accentPicker.value = savedAccent.hex;
         }
 
+        populateCategoryFilter();
         updateSidebar();
         const savedIndex = LS.get(K_CURRENT);
         const idx = (typeof savedIndex==='number' && savedIndex>=0 && savedIndex<challenges.length) ? savedIndex : 0;
@@ -540,6 +580,20 @@ async function bootApp(){
         loadChallenge(idx);
         booting = false;
     })();
+
+    // override prev/next to respect filtered list
+    document.getElementById('prevBtn').addEventListener('click', () => {
+        const sel = LS.get('ui.category') || 'all';
+        const visible = challenges.map((ch,i)=>({ch,i})).filter(({ch})=> sel==='all' || (ch.category||'').toLowerCase()===sel.toLowerCase());
+        const idxInVisible = visible.findIndex(v=>v.i===currentIndex);
+        if (idxInVisible > 0) loadChallenge(visible[idxInVisible-1].i);
+    });
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        const sel = LS.get('ui.category') || 'all';
+        const visible = challenges.map((ch,i)=>({ch,i})).filter(({ch})=> sel==='all' || (ch.category||'').toLowerCase()===sel.toLowerCase());
+        const idxInVisible = visible.findIndex(v=>v.i===currentIndex);
+        if (idxInVisible >= 0 && idxInVisible < visible.length - 1) loadChallenge(visible[idxInVisible+1].i);
+    });
 
     // Keep workspace sized
     window.addEventListener('resize', ()=>Blockly.svgResize(workspace));
