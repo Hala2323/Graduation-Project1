@@ -232,7 +232,14 @@
 
 <div class="main-layout">
     <div class="sidebar-left">
-        <div class="sidebar-header">Skills</div>
+        <div style="padding:12px 12px; border-bottom:1px solid var(--border); background:rgba(255,255,255,0.01);">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <div class="sidebar-header" style="flex:1; text-align:left;">Skills</div>
+                <select id="categoryFilter" class="nav-select" title="Filter by category">
+                    <option value="all">All</option>
+                </select>
+            </div>
+        </div>
         <div id="challengeList"></div>
     </div>
 
