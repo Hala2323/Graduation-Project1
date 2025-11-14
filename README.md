@@ -118,9 +118,8 @@ You can deploy the app on:
 ## Future Enhancements (Suggested)
 
 - Add student progress tracking via localStorage  
-- Support for multiple programming languages  
-- Drag-and-drop block-based coding (Blockly or Scratch integration)  
-- User interface theme customization (light/dark mode)  
+- Support for multiple programming languages
+- Add badges and achievements for more motivation
 
 ---
 
