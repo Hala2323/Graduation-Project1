@@ -43,7 +43,6 @@ It runs **fully client-side**, meaning it works directly in the browser — no s
 |-------|-------------|
 | Frontend | HTML5, CSS3, JavaScript (Vanilla JS) |
 | Data Storage | JSON (`challenges.json`) |
-| Media | MP4 video integration |
 | Execution | Client-side (no backend dependencies) |
 
 ---
